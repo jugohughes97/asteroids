@@ -5,15 +5,14 @@ from constants import *
 from circleshape import CircleShape
 class Meteor(CircleShape):
     
-    def __init__(self, target, x, y): 
+    def __init__(self, target = None, x = SCREEN_WIDTH, y = SCREEN_HEIGHT, radius_func = randomize_meteor_radius, vel = pygame.Vector2(0,0)): 
         
-        super().__init__(x, y, self.randomize_meteor_radius())
-        self.velocity = self.generate_vel(target.copy())
+        super().__init__(x, y, radius_func())
+        if target is None:
+            self.velocity = vel
+        else:
+            self.velocity = self.generate_vel(target.copy())
         self.lu = self.find_lu()
-
-    def randomize_meteor_radius(self):
-        
-        return int(randrange(ASTEROID_MIN_RADIUS, ASTEROID_MAX_RADIUS, 1))
     
     def draw(self, screen):
         
@@ -58,4 +57,11 @@ class Meteor(CircleShape):
             case other:
                 return x+r < 0 and y+r < 0
 
-
+    def split(self, t):
+        if self.radius - ASTEROID_MIN_RADIUS < ASTEROID_MIN_RADIUS:
+            return None, None
+        a,b = Meteor(x = self.position.x,y = self.position.y, radius_func = lambda: self.radius - ASTEROID_MIN_RADIUS, vel=self.velocity),Meteor(x = self.position.x,y = self.position.y, radius_func = lambda: self.radius - ASTEROID_MIN_RADIUS, vel=self.velocity)
+        angle_to = int(self.velocity.angle_to(self.velocity))
+        a.velocity = a.velocity.rotate(randrange(angle_to-40, angle_to+40, 5))
+        b.velocity = b.velocity.rotate(randrange(angle_to-40, angle_to+40, 5))
+        return a,b

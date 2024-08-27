@@ -33,8 +33,12 @@ class MeteorManager:
             for b in player.bullet_manager.fired_shots:
                 if m.collision(b):
                     player.bullet_manager.remove_fired_shot(b)
+                    x,y = m.split(player)
                     self.meteors.remove(m)
-            
+                    if x is not None and y is not None:
+                        self.meteors.append(x)
+                        self.meteors.append(y)
+                
             if m.is_beyond():
                 self.meteors.remove(m)
     
