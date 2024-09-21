@@ -26,30 +26,28 @@ def main():
 
     run = True
     while True:
-        if pygame.key.get_pressed()[pygame.K_p]:
-            run = not run
-        if run:
-            clock = pygame.time.Clock()
 
-            #gameloop
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    print(meteor_manager.meteors)
-                    return
-            screen.fill(0x000000)
+        clock = pygame.time.Clock()
 
-            #update vars
-            
-            meteor_manager.update(player, dt)
-            meteor_manager.draw(screen)
-            for u in updatable:
-                u.update(dt)
-            for d in drawable:
-                d.draw(screen)
-            # player.update(dt)
-            # player.draw(screen)
-            pygame.display.flip()
-            dt = clock.tick(60) / 1000
+        #gameloop
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                print(meteor_manager.meteors)
+                return
+        screen.fill(0x000000)
+
+        #update vars
+        
+        meteor_manager.update(player, dt)
+        meteor_manager.draw(screen)
+        for u in updatable:
+            u.update(dt)
+        for d in drawable:
+            d.draw(screen)
+        # player.update(dt)
+        # player.draw(screen)
+        pygame.display.flip()
+        dt = clock.tick(60) / 1000
 
 if __name__ == "__main__":
     main()

@@ -18,6 +18,7 @@ class Shot(CircleShape):
         if self.is_active:
             #update position
             self.position += pygame.Vector2(0,1).rotate(self.rotation) * dt * self.velocity
+            
 
     def draw(self, screen):
         if self.is_active:
