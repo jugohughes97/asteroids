@@ -1,13 +1,13 @@
 import pygame
 from constants import *
 from player import Player
-from meteor import Meteor
-from meteormanager import MeteorManager
+from asteroid import Asteroid
+from asteroidmanager import AsteroidManager
 
 def main():
 
 
-    print("Starting asteroids!")
+    print("Starting asteroids")
     print("Screen width:",SCREEN_WIDTH)
     print("Screen height:",SCREEN_HEIGHT)
     print("Screen radius:", SCREEN_RADIUS)
@@ -16,7 +16,7 @@ def main():
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-    meteor_manager = MeteorManager()
+    asteroid_manager = AsteroidManager()
     dt = 0
 
     updatable = pygame.sprite.Group()
@@ -32,14 +32,14 @@ def main():
         #gameloop
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print(meteor_manager.meteors)
+                print(asteroid_manager.asteroids)
                 return
         screen.fill(0x000000)
 
         #update vars
         
-        meteor_manager.update(player, dt)
-        meteor_manager.draw(screen)
+        asteroid_manager.update(player, dt)
+        asteroid_manager.draw(screen)
         for u in updatable:
             u.update(dt)
         for d in drawable:

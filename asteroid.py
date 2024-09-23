@@ -1,9 +1,10 @@
 
 import pygame
+import sys
 from random import randrange
 from constants import *
 from circleshape import CircleShape
-class Meteor(CircleShape):
+class Asteroid(CircleShape):
     
     def __init__(self, target = None, x = SCREEN_WIDTH, y = SCREEN_HEIGHT, radius_func = randomize_meteor_radius, vel = pygame.Vector2(0,0)): 
         
@@ -34,33 +35,39 @@ class Meteor(CircleShape):
     def find_lu(self):
         x, y =self.position.x, self.position.y
         xh, yh = SCREEN_WIDTH/2, SCREEN_HEIGHT/2
-        if x < xh and y < yh:
-            return True, True
-        elif x > xh and y < yh:
-            return False,True
-        elif x < xh and y > yh:
-            return True,False
-        else:
-            return False,False
+        return x < xh and y < yh
         
     def is_beyond(self):
         x, y =self.position.x, self.position.y
         sw, sh = SCREEN_WIDTH, SCREEN_HEIGHT
         r = self.radius
-        match self.lu:
-            case True,True:
-                return x + r > sw and y + r > sh
-            case False,True:
-                return x+r < 0 and y + r > sh
-            case True,False:
-                return x+r > sw and y+r < 0
-            case other:
-                return x+r < 0 and y+r < 0
+        if self.lu == (True,True):
+            return x + r > sw and y + r > sh
+        elif self.lu == (False,True):
+            return x+r < 0 and y + r > sh
+        elif (True,False):
+            return x+r > sw and y+r < 0
+        else:
+            return x+r < 0 and y+r < 0
+        # else:
+
+        #     x, y =self.position.x, self.position.y
+        #     sw, sh = SCREEN_WIDTH, SCREEN_HEIGHT
+        #     r = self.radius
+        #     match self.lu:
+        #         case True,True:
+        #             return x + r > sw and y + r > sh
+        #         case False,True:
+        #             return x+r < 0 and y + r > sh
+        #         case True,False:
+        #             return x+r > sw and y+r < 0
+        #         case other:
+        #             return x+r < 0 and y+r < 0
 
     def split(self, t):
         if self.radius - ASTEROID_MIN_RADIUS < ASTEROID_MIN_RADIUS:
             return None, None
-        a,b = Meteor(x = self.position.x,y = self.position.y, radius_func = lambda: self.radius - ASTEROID_MIN_RADIUS, vel=self.velocity),Meteor(x = self.position.x,y = self.position.y, radius_func = lambda: self.radius - ASTEROID_MIN_RADIUS, vel=self.velocity)
+        a,b = Asteroid(x = self.position.x,y = self.position.y, radius_func = lambda: self.radius - ASTEROID_MIN_RADIUS, vel=self.velocity),Asteroid(x = self.position.x,y = self.position.y, radius_func = lambda: self.radius - ASTEROID_MIN_RADIUS, vel=self.velocity)
         angle_to = int(self.velocity.angle_to(self.velocity))
         a.velocity = a.velocity.rotate(randrange(angle_to-40, angle_to+40, 5))
         b.velocity = b.velocity.rotate(randrange(angle_to-40, angle_to+40, 5))
